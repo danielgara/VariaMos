@@ -73,6 +73,14 @@ export class ComponentFunctions {
           const label = target.getAttribute('label');
           const clonId = target.getId();
           const id = clonId.replace('clon', '');
+          let appDestination = "";
+
+          const outEgdes = graph.getModel().getOutgoingEdges(graph.getModel().getCell(id));
+          if (outEgdes) {
+            const appTarget = outEgdes[0].target;
+            appDestination = appTarget.getAttribute('destination');
+          }
+
           const incoEgdes = graph.getModel().getIncomingEdges(graph.getModel().getCell(id));
           for (let j = 0; j < incoEgdes.length; j += 1) {
             const fileSource = incoEgdes[j].source;
@@ -81,10 +89,11 @@ export class ComponentFunctions {
                 component_folder: '', ID: '', filename: '', destination: '',
               };
               data.component_folder = label;
+              data.component_folder = data.component_folder.replace("-", "/");
               data.ID = fileSource.getAttribute('label');
               data.filename = fileSource.getAttribute('filename');
               if (fileSource.getAttribute('type') == 'file') {
-                data.destination = fileSource.getAttribute('destination');
+                data.destination = appDestination + fileSource.getAttribute('destination');
               } else {
                 data.destination = '';
               }

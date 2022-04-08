@@ -7,19 +7,30 @@ export class ComponentModel extends Model {
   public constructor() {
     super(
       'component',
-      ['ComponentElement', 'FileElement', 'FragmentElement', 'CustomElement'],
+      ['AppElement', 'ComponentElement', 'FileElement', 'FragmentElement', 'CustomElement'],
     );
 
     let constraints = this.getConstraints();
     constraints = [
       {
         source: 'true',
-        type: 'component',
+        type: 'app',
         attr: null,
         value: null,
         min: 0,
         max: 0,
         validNeighbors: null,
+        countError: 'Invalid connection',
+        typeError: 'Only shape targets allowed',
+      },
+      {
+        source: 'true',
+        type: 'component',
+        attr: null,
+        value: null,
+        min: 0,
+        max: 1,
+        validNeighbors: ['app'],
         countError: 'Invalid connection',
         typeError: 'Only shape targets allowed',
       },

@@ -1,0 +1,43 @@
+<shapes>
+	<shape name="app" aspect="variable">
+		<background>
+			<path>
+				<move x="30" y="0"/>
+				<line x="70" y="0"/>
+				<line x="100" y="50"/>
+				<line x="70" y="100"/>
+				<line x="30" y="100"/>
+				<line x="0" y="50"/>
+				<line x="30" y="0"/>
+				<close/>
+			</path>		
+		</background>
+		<foreground>
+			<fillstroke/>
+		</foreground>
+	</shape>
+	<shape name="server" aspect="variable">
+		<background>
+			<path>
+				<move x="0" y="0"/>
+				<line x="100" y="0"/>
+				<line x="100" y="100"/>
+				<line x="0" y="100"/>
+				<line x="0" y="0"/>
+				<close/>
+				<move x="10" y="10"/>
+				<line x="90" y="10"/>
+				<close/>
+				<move x="10" y="20"/>
+				<line x="90" y="20"/>
+				<close/>
+				<move x="10" y="30"/>
+				<line x="90" y="30"/>
+				<close/>
+			</path>		
+		</background>
+		<foreground>
+			<fillstroke/>
+		</foreground>
+	</shape>
+</shapes>

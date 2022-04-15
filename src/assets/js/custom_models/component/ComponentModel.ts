@@ -73,6 +73,7 @@ export class ComponentModel extends Model {
     // clone component cells in binding_feature_component model if available
     const elementClones = {
       component: 'binding_feature_component',
+      app: 'deployment',
     };
     this.setElementClones(elementClones);
 

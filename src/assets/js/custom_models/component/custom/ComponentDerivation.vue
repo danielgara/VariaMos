@@ -376,7 +376,8 @@ export default class ComponentDerivation extends Vue {
     for (let i = 0; i < componentRelations.length; i += 1) {
       const source = componentRelations[i].source.getAttribute('label');
       if (source == id) {
-        return componentRelations[i].source.getAttribute('destination');
+        const app = source.split('-')[0]; // add app folder
+        return `${app}/${componentRelations[i].source.getAttribute('destination')}`;
       }
     }
     return '';

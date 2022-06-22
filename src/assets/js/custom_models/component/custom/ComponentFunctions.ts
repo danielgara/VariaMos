@@ -13,13 +13,14 @@ export class ComponentFunctions {
       const { source } = bindingRelations[i];
       const { target } = bindingRelations[i];
       if (source.getAttribute('selected') == 'true') { // only selected concrete features are analyzed
-        const label = target.getAttribute('label');
+        let label = target.getAttribute('label');
         const clonId = target.getId();
         const id = clonId.replace('clon', '');
         const incoEgdes = graph.getModel().getIncomingEdges(graph.getModel().getCell(id));
         for (let j = 0; j < incoEgdes.length; j += 1) {
           const fileSource = incoEgdes[j].source;
           if (fileSource.getAttribute('type') == 'custom') {
+            label = label.replace('-', '/');
             customizations.push(label);
           }
         }

@@ -22,6 +22,7 @@
 // @ts-nocheck
 import { Vue, Options } from 'vue-class-component';
 import axios from 'axios';
+import { DeploymentFunctions } from './DeploymentFunctions';
 
 @Options({
   props: ['variaMosGraph'],
@@ -54,19 +55,40 @@ export default class DeploymentActions extends Vue {
   public uploadAppsToGitHub() {
     const modal = this.variaMosGraph.getModal();
     if (this.customConfig.backendURL != '' && this.customConfig.backendPoolFolder && this.customConfig.backendDerivationFolder) {
+      const apps = DeploymentFunctions.getApps(this.variaMosGraph.getGraph());
       const self = this;
-      axios.post(`${self.customConfig.backendURL}deployment/uploadAppsToGitHub`, {
-        apps: 'Frontend',
-        p_derived: self.customConfig.backendDerivationFolder,
-      })
-        .then((response) => {
-          modal.setData('success', 'Success', response.data);
-          modal.click();
+      const confirmAction = function anonymousConfirm() {
+        const app = document.querySelector('input[name="selectedApp"]:checked').value;
+        axios.post(`${self.customConfig.backendURL}deployment/uploadAppsToGitHub`, {
+          apps: app,
+          p_derived: self.customConfig.backendDerivationFolder,
+          repo: self.customConfig.repo,
+          token: self.customConfig.token,
         })
-        .catch((error) => {
-          modal.setData('error', 'Error', `Wrong backend connection. ${error}`);
-          modal.click();
-        });
+          .then((response) => {
+            modal.setData('success', 'Success', response.data);
+          })
+          .catch((error) => {
+            modal.setData('error', 'Error', `Wrong backend connection. ${error}`);
+          });
+      };
+
+      let radioHTML = '';
+      for (let i = 0; i < apps.length; i += 1) {
+        radioHTML += `<input name="selectedApp" type="radio" value="${apps[i]}">
+        <label>${apps[i]}</label><br />`;
+      }
+
+      const stringBody = `<div>Select the app to be pushed to GitHub: <br/><br />${radioHTML}</div>`;
+      modal.setData(
+        '',
+        'Confirm App to be Pushed to GitHub',
+        stringBody,
+        'confirm',
+        confirmAction,
+      );
+      modal.setSecondaryMessage(true);
+      modal.click();
     }
   }
 }

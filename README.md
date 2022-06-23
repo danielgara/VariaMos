@@ -2,19 +2,16 @@
 
 VariaMos is a modeling tool and a framework, that can be easily extended, and that allows you to define your own models.
 
-**Main Branch**
+# VariaMos installation
 
-![Unit Tests](https://github.com/VariaMosORG/VariaMos/workflows/Unit%20Tests/badge.svg?branch=main)
+If you want to install the VariaMos deployment version, you just need:
 
-![End-to-end Tests](https://github.com/VariaMosORG/VariaMos/workflows/End-to-end%20Tests/badge.svg?branch=main)
+1. Install Docker (info [here](https://docs.docker.com/get-docker/)).
+2. Run the next command:
+`sudo docker run -d -p 80:80 --name variamos-front danielgara/variamosfrontdeployment`
+3. Open the application in the port 80.
 
-![Publish Docker Images](https://github.com/VariaMosORG/VariaMos/workflows/Publish%20Docker%20Images/badge.svg)
-
-## VariaMos online
-You can check the VariaMos application here: [www.variamos.tk](http://variamos.tk/)
-
-## VariaMos documentation
-VariaMos documentation can be found here: [wiki](https://github.com/VariaMosORG/VariaMos/wiki/)
+**Note:** there is available documentation about how to install VariaMos without docker. You can find it at the developers documentation [here](https://github.com/VariaMosORG/VariaMos/wiki/Developers-%E2%80%90-VariaMos-installation) (skip the git and GitHub part, and just download the project as a zip).
 
 # Project
 

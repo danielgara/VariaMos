@@ -58,11 +58,13 @@ export default class DeploymentActions extends Vue {
       const apps = DeploymentFunctions.getApps(this.variaMosGraph.getGraph());
       const self = this;
       const confirmAction = function anonymousConfirm() {
+        const textInput = document.getElementById('repoName') as any;
+        const repoName = textInput.value;
         const app = document.querySelector('input[name="selectedApp"]:checked').value;
         axios.post(`${self.customConfig.backendURL}deployment/uploadAppsToGitHub`, {
           apps: app,
           p_derived: self.customConfig.backendDerivationFolder,
-          repo: self.customConfig.repo,
+          repo: repoName,
           token: self.customConfig.token,
         })
           .then((response) => {
@@ -79,7 +81,8 @@ export default class DeploymentActions extends Vue {
         <label>${apps[i]}</label><br />`;
       }
 
-      const stringBody = `<div>Select the app to be pushed to GitHub: <br/><br />${radioHTML}</div>`;
+      const stringBody = `<div>Select the app to be pushed to GitHub: <br/><br />${radioHTML}</div><br />
+      <b>Enter the repo to be pushed:</b> <input class='text' id='repoName' placeholder='user/repo'></textarea></div>`;
       modal.setData(
         '',
         'Confirm App to be Pushed to GitHub',

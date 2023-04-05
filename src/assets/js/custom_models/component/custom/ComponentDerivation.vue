@@ -109,7 +109,7 @@ export default class ComponentDerivation extends Vue {
       }
 
       data.component = cell.getEdgeAt(0).target.getAttribute('label');
-      data.component = data.component.replace('-', '/');
+      data.component = data.component.replaceAll('-', '/');
       const modelData = JSON.stringify(data);
       axios.post(`${this.customConfig.backendURL}ComponentImplementation/getFile`, {
         data: modelData,

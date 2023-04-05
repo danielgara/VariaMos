@@ -1,4 +1,10 @@
+import { mxgraphFactory } from 'ts-mxgraph';
 import { Model } from '../../model/Model';
+
+const {
+  mxImage,
+  mxCellOverlay,
+} = mxgraphFactory({ mxLoadResources: false, mxLoadStylesheets: false });
 
 /**
  * @author Daniel Correa <dcorreab@eafit.edu.co>
@@ -7,7 +13,7 @@ export class ComponentModel extends Model {
   public constructor() {
     super(
       'component',
-      ['AppElement', 'ComponentElement', 'FileElement', 'FragmentElement', 'CustomElement'],
+      ['AppElement', 'ComponentElement', 'FileElement', 'FragmentElement', 'CustomElement', 'BundleElement', 'ComponentSelectableElement'],
     );
 
     let constraints = this.getConstraints();
@@ -41,7 +47,7 @@ export class ComponentModel extends Model {
         value: null,
         min: 0,
         max: 1,
-        validNeighbors: ['component'],
+        validNeighbors: ['component', 'component-selectable'],
         countError: 'Only 1 target allowed',
         typeError: 'Only shape targets allowed',
       },
@@ -52,7 +58,7 @@ export class ComponentModel extends Model {
         value: null,
         min: 0,
         max: 1,
-        validNeighbors: ['component'],
+        validNeighbors: ['component', 'component-selectable'],
         countError: 'Only 1 target allowed',
         typeError: 'Only shape targets allowed',
       },
@@ -63,12 +69,38 @@ export class ComponentModel extends Model {
         value: null,
         min: 0,
         max: null,
-        validNeighbors: ['file', 'component'],
+        validNeighbors: ['file', 'component', 'component-selectable'],
+        countError: 'Only 1 target allowed',
+        typeError: 'Only shape targets allowed',
+      },
+      {
+        source: 'true',
+        type: 'bundle',
+        attr: null,
+        value: null,
+        min: 0,
+        max: 1,
+        validNeighbors: ['component'],
+        countError: 'Only 1 target allowed',
+        typeError: 'Only shape targets allowed',
+      },
+      {
+        source: 'true',
+        type: 'component-selectable',
+        attr: null,
+        value: null,
+        min: 0,
+        max: 1,
+        validNeighbors: ['bundle'],
         countError: 'Only 1 target allowed',
         typeError: 'Only shape targets allowed',
       },
     ];
     this.setConstraints(constraints);
+
+    // default element to be shown in drawing area is bundleType (for bundle elements)
+    const customElementTexts = { bundle: 'bundleType' };
+    this.setCustomElementTexts(customElementTexts);
 
     // clone component cells in binding_feature_component model if available
     const elementClones = {
@@ -122,5 +154,20 @@ export class ComponentModel extends Model {
     }
 
     return returnConstraintRelations;
+  }
+
+  // display overlay (green check) of selected concrete features
+  public overlayStart() {
+    const cells = this.getModelUtil().searchCellsByType(this.getType(), 'component-selectable');
+    for (let i = 0; i < cells.length; i += 1) {
+      const sel = cells[i].getAttribute('selected');
+      if (sel == 'true') {
+        const overlay = new mxCellOverlay(
+          new mxImage('/img/check.png', 16, 16),
+          'Overlay tooltip',
+        );
+        this.getModelUtil().getVGraph().getGraph().addCellOverlay(cells[i], overlay);
+      }
+    }
   }
 }

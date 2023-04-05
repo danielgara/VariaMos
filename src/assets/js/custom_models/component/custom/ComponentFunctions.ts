@@ -83,9 +83,15 @@ export class ComponentFunctions {
           }
 
           const incoEgdes = graph.getModel().getIncomingEdges(graph.getModel().getCell(id));
+
+          let bundles = [];
+
           for (let j = 0; j < incoEgdes.length; j += 1) {
             const fileSource = incoEgdes[j].source;
-            if (fileSource.getAttribute('type') != 'custom') {
+            if (fileSource.getAttribute('type') == 'bundle') {
+              bundles.push(fileSource);
+            }
+            else if (fileSource.getAttribute('type') != 'custom') {
               const data = {
                 component_folder: '', ID: '', filename: '', destination: '',
               };
@@ -99,6 +105,36 @@ export class ComponentFunctions {
                 data.destination = '';
               }
               files.push(data);
+            }
+          }
+
+          //check for bundles (components selectable)
+          for (let j = 0; j < bundles.length; j += 1) {
+            const incoBundleEgdes = graph.getModel().getIncomingEdges(graph.getModel().getCell(bundles[j].getId()));
+            for (let k = 0; k < incoBundleEgdes.length; k += 1) {
+              const sourceBundle = incoBundleEgdes[k].source;
+              if (sourceBundle.getAttribute('selected') == 'true') { // only selected components selectables are analyzed
+                const labelBundle = sourceBundle.getAttribute('label');
+                const incoFileEgdes = graph.getModel().getIncomingEdges(graph.getModel().getCell(sourceBundle.getId()));
+                for (let l = 0; l < incoFileEgdes.length; l += 1) {
+                  const fileSource = incoFileEgdes[l].source;
+                  if (fileSource.getAttribute('type') != 'custom') {
+                    const data = {
+                      component_folder: '', ID: '', filename: '', destination: '',
+                    };
+                    data.component_folder = labelBundle;
+                    data.component_folder = data.component_folder.replaceAll("-", "/");
+                    data.ID = fileSource.getAttribute('label');
+                    data.filename = fileSource.getAttribute('filename');
+                    if (fileSource.getAttribute('type') == 'file') {
+                      data.destination = appDestination + fileSource.getAttribute('destination');
+                    } else {
+                      data.destination = '';
+                    }
+                    files.push(data);
+                  }
+                }
+              }
             }
           }
         }

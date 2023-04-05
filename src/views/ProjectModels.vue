@@ -111,6 +111,8 @@ import GlobalVueFunctions from '../mixins/GlobalVueFunctions';
       } else {
         // restart the search function of the App.vue instance
         this.$root.search = function anonymousSearch() {};
+        // refresh the elements area
+        this.divElements.innerHTML = '';
       }
     },
   },
